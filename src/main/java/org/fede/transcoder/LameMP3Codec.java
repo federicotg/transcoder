@@ -24,11 +24,13 @@ import java.util.Optional;
 
 public class LameMP3Codec implements AudioCodec {
 
+    private static final String SCRIPT_NAME = "/flactomp3.sh";
+    
     private List<String> arguments;
 
     public LameMP3Codec() {
         arguments = new ArrayList<>(5);
-        arguments.add("/tmp/flactomp3.sh");
+        arguments.add(System.getProperty("java.io.tmpdir")+SCRIPT_NAME);
         arguments.add("quality");
         arguments.add("src");
         arguments.add("dstDir");
@@ -98,6 +100,6 @@ public class LameMP3Codec implements AudioCodec {
 
     @Override
     public Optional<String> getScript() {
-        return Optional.of("/flactomp3.sh");
+        return Optional.of(SCRIPT_NAME);
     }
 }

@@ -23,11 +23,13 @@ import java.util.Optional;
 
 public class AoTuVAudioCodec implements AudioCodec {
 
+    private static final String SCRIPT_NAME = "/aotuv.sh";
+    
     private List<String> arguments;
 
     public AoTuVAudioCodec() {
         arguments = new ArrayList<>(7);
-        arguments.add("/tmp/aotuv.sh");
+        arguments.add(System.getProperty("java.io.tmpdir")+SCRIPT_NAME);
         arguments.add("-Q");
         arguments.add("-q");
         arguments.add("quality");
@@ -94,6 +96,6 @@ public class AoTuVAudioCodec implements AudioCodec {
 
     @Override
     public Optional<String> getScript() {
-        return Optional.of("/aotuv.sh");
+        return Optional.of(SCRIPT_NAME);
     }
 }
