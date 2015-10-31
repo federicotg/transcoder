@@ -18,6 +18,7 @@
 package org.fede.transcoder;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface AudioCodec {
     public void setQuality(String quality);
@@ -35,4 +36,5 @@ public interface AudioCodec {
     public String getExtension();
     public List<String> getQualities();
     public String getDefaultQualityString();
+    public Optional<String> getScript();
 }

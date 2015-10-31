@@ -20,6 +20,7 @@ package org.fede.transcoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 public class VorbisAudioCodec implements AudioCodec {
 
@@ -110,5 +111,10 @@ public class VorbisAudioCodec implements AudioCodec {
     @Override
     public String getDefaultQualityString() {
         return "3";
+    }
+    
+    @Override
+    public Optional<String> getScript() {
+        return Optional.empty();
     }
 }

@@ -376,21 +376,13 @@ public class TranscoderGUI extends JFrame implements Observer {
             transcoder.cancelTranscode();
             transcoder.deleteObserver(this);
 
-            SwingUtilities.invokeLater(new Runnable() {
-
-                @Override
-                public void run() {
-                    JOptionPane.showMessageDialog(getContentPane(), "Error", "Error", JOptionPane.ERROR_MESSAGE);
-                }
+            SwingUtilities.invokeLater(() -> {
+                JOptionPane.showMessageDialog(getContentPane(), "Error", "Error", JOptionPane.ERROR_MESSAGE);
             });
         } else {
 
-            SwingUtilities.invokeLater(new Runnable() {
-
-                @Override
-                public void run() {
-                    progressModel.setValue(progressModel.getValue() + 1);
-                }
+            SwingUtilities.invokeLater(() -> {
+                progressModel.setValue(progressModel.getValue() + 1);
             });
         }
     }

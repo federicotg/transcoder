@@ -19,8 +19,11 @@ package org.fede.transcoder;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Observable;
 import java.util.concurrent.Callable;
@@ -52,16 +55,42 @@ public class Transcoder extends Observable {
     }
 
     public void transcodeInParallel(boolean overwrite, int cores) throws IOException, InterruptedException {
+        this.codec.getScript().ifPresent(scriptResourceName -> copyToTemp(scriptResourceName));
         this.executor = Executors.newFixedThreadPool(cores);
         this.transcode(src, overwrite);
         this.executor.shutdown();
         while (!this.executor.isTerminated()) {
             this.executor.awaitTermination(10, TimeUnit.SECONDS);
         }
+
+        this.codec.getScript()
+                .ifPresent(scriptName -> this.deleteIfExists(new File(System.getProperty("java.io.tmpdir") + scriptName)));
     }
 
-    private void transcode(final File currentSrc,
-            boolean overwrite) throws IOException, InterruptedException {
+    private void deleteIfExists(File f) {
+        if (f.exists()) {
+            f.delete();
+        }
+    }
+
+    private void copyToTemp(String resourceName) {
+        File outFile = new File(System.getProperty("java.io.tmpdir") + resourceName);
+        byte[] buffer = new byte[4096];
+        int read = -1;
+        try (InputStream in = this.getClass().getResourceAsStream(resourceName);
+                OutputStream out = new FileOutputStream(outFile)) {
+            while ((read = in.read(buffer)) > 0) {
+                out.write(buffer, 0, read);
+            }
+            outFile.setExecutable(true);
+        } catch (IOException ioEx) {
+            throw new RuntimeException(ioEx);
+        }
+
+    }
+
+    private void transcode(final File currentSrc, boolean overwrite)
+            throws IOException, InterruptedException {
 
         final ProcessBuilder pb = new ProcessBuilder(this.codec.getArguments());
         for (File srcFile : currentSrc.listFiles(SOURCE_FILENAME_FILTER)) {
@@ -102,7 +131,7 @@ public class Transcoder extends Observable {
     public static void main(String[] args) {
         try {
             SwingUtilities.invokeAndWait(() -> new TranscoderGUI().setVisible(true));
-            
+
         } catch (InterruptedException | InvocationTargetException ex) {
             Logger.getLogger(Transcoder.class.getName()).log(Level.SEVERE, null, ex);
         }

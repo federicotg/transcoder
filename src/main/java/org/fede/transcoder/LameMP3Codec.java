@@ -21,6 +21,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 public class LameMP3Codec implements AudioCodec {
 
@@ -29,8 +30,8 @@ public class LameMP3Codec implements AudioCodec {
     private List<String> arguments;
 
     public LameMP3Codec() {
-        arguments = new ArrayList<>(7);
-        arguments.add("/home/fede/bin/flactomp3.sh");
+        arguments = new ArrayList<>(5);
+        arguments.add("/tmp/flactomp3.sh");
         arguments.add("quality");
         arguments.add("src");
         arguments.add("dstDir");
@@ -101,5 +102,10 @@ public class LameMP3Codec implements AudioCodec {
     @Override
     public String getDefaultQualityString() {
         return "4";
+    }
+
+    @Override
+    public Optional<String> getScript() {
+        return Optional.of("/flactomp3.sh");
     }
 }

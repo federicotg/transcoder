@@ -20,6 +20,7 @@ package org.fede.transcoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 public class AoTuVAudioCodec implements AudioCodec {
 
@@ -29,8 +30,8 @@ public class AoTuVAudioCodec implements AudioCodec {
     private List<String> arguments;
 
     public AoTuVAudioCodec() {
-        arguments = new ArrayList<String>(7);
-        arguments.add("/home/fede/bin/aotuv.sh");
+        arguments = new ArrayList<>(7);
+        arguments.add("/tmp/aotuv.sh");
         arguments.add("-Q");
         arguments.add("-q");
         arguments.add("quality");
@@ -96,5 +97,10 @@ public class AoTuVAudioCodec implements AudioCodec {
     @Override
     public String getDefaultQualityString() {
         return "3";
+    }
+    
+    @Override
+    public Optional<String> getScript() {
+        return Optional.of("/aotuv.sh");
     }
 }
