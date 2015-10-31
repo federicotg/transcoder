@@ -19,14 +19,11 @@ package org.fede.transcoder;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 public class LameMP3Codec implements AudioCodec {
 
-    private static final List<String> QUALITIES = new ArrayList<>(
-            Arrays.asList(new String[]{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"}));
     private List<String> arguments;
 
     public LameMP3Codec() {
@@ -92,11 +89,6 @@ public class LameMP3Codec implements AudioCodec {
     @Override
     public String getExtension() {
         return ".mp3";
-    }
-
-    @Override
-    public List<String> getQualities() {
-        return QUALITIES;
     }
 
     @Override

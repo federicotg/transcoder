@@ -17,21 +17,12 @@
  */
 package org.fede.transcoder;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class AoTuVAudioCodec implements AudioCodec {
 
-    private static final List<String> QUALITIES = IntStream.rangeClosed(-20, 100)
-            .mapToObj(value -> new BigDecimal(value).setScale(1).movePointLeft(1).toString())
-            .collect(Collectors.toList());
-
-    /* = new ArrayList<>(
-     Arrays.asList(new String[]{"-2","-1", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"}));*/
     private List<String> arguments;
 
     public AoTuVAudioCodec() {
@@ -95,10 +86,6 @@ public class AoTuVAudioCodec implements AudioCodec {
         return 0.1d;
     }
 
-    @Override
-    public List<String> getQualities() {
-        return QUALITIES;
-    }
 
     @Override
     public String getDefaultQualityString() {

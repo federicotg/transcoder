@@ -34,7 +34,6 @@ public interface AudioCodec {
     public int getDefaultQuality();
     public double getStepSize();
     public String getExtension();
-    public List<String> getQualities();
     public String getDefaultQualityString();
     public Optional<String> getScript();
 }
