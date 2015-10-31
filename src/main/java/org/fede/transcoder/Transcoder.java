@@ -106,7 +106,7 @@ public class Transcoder extends Observable {
                     }
                     int val = process.waitFor();
                     if (val != 0) {
-                        System.err.println("ERROR: " + dstName + ": " + val);
+                        Logger.getLogger(Transcoder.class.getName()).log(Level.SEVERE, "ERROR: {0}: {1}", new Object[]{dstName, val});
                     }
                     synchronized (Transcoder.this) {
                         setChanged();
@@ -133,7 +133,7 @@ public class Transcoder extends Observable {
             SwingUtilities.invokeAndWait(() -> new TranscoderGUI().setVisible(true));
 
         } catch (InterruptedException | InvocationTargetException ex) {
-            Logger.getLogger(Transcoder.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Transcoder.class.getName()).log(Level.SEVERE, "Fatal exception", ex);
         }
     }
 }
