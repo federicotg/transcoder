@@ -98,7 +98,7 @@ public class TranscoderGUI extends JFrame implements Observer {
     }
 
     private void initComponents() {
-        AudioCodec defaultCodec = new AoTuVAudioCodec();
+        Codec defaultCodec = new AoTuVAudioCodec();
         this.qualityModel = new SpinnerNumberModel(
                 defaultCodec.getDefaultQuality(),
                 defaultCodec.getMinumumQuality(),
@@ -140,7 +140,7 @@ public class TranscoderGUI extends JFrame implements Observer {
 
                     @Override
                     protected Object doInBackground() throws Exception {
-                        AudioCodec codec = (AudioCodec) codecCombo.getSelectedItem();
+                        Codec codec = (Codec) codecCombo.getSelectedItem();
                         codec.setQuality(String.valueOf(qualityModel.getValue()));
                         transcoder = new Transcoder(codec, src, dst);
                         transcoder.addObserver(TranscoderGUI.this);
@@ -207,11 +207,11 @@ public class TranscoderGUI extends JFrame implements Observer {
             }
         };
 
-        AudioCodec[] codecs = new AudioCodec[]{new AoTuVAudioCodec(), new VorbisAudioCodec(), new LameMP3Codec()};
+        Codec[] codecs = new Codec[]{new AoTuVAudioCodec(), new VorbisAudioCodec(), new LameMP3Codec()};
 
         this.codecCombo = new JComboBox(codecs);
         this.codecCombo.addActionListener((ActionEvent e) -> {
-            AudioCodec selection = (AudioCodec) codecCombo.getSelectedItem();
+            Codec selection = (Codec) codecCombo.getSelectedItem();
             qualityModel = new SpinnerNumberModel(selection.getDefaultQuality(),
                     selection.getMinumumQuality(),
                     selection.getMaximumQuality(), selection.getStepSize());

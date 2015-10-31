@@ -17,23 +17,23 @@
  */
 package org.fede.transcoder;
 
-/**
- *
- * @author Federico Tello Gentile <federicotg@gmail.com>
- */
-public abstract class AudioCodec extends BaseCodec{
-    
-    private String quality;
+import java.util.List;
+import java.util.Optional;
 
-    @Override
-    public void setQuality(String quality) {
-        this.quality = quality;
-    }
+public interface Codec {
+    public void setQuality(String quality);
 
-    protected String getQuality() {
-        return quality;
-    }
-    
-    
-    
+    public void setSource(String src);
+
+    public void setDestination(String dst);
+
+    public List<String> getArguments();
+
+    public int getMinumumQuality();
+    public int getMaximumQuality();
+    public int getDefaultQuality();
+    public double getStepSize();
+    public String getExtension();
+    public String getDefaultQualityString();
+    public Optional<String> getScript();
 }

@@ -21,17 +21,27 @@ package org.fede.transcoder;
  *
  * @author Federico Tello Gentile <federicotg@gmail.com>
  */
-public abstract class AudioCodec extends BaseCodec{
+public abstract class BaseCodec implements Codec{
     
-    private String quality;
+    private String source;
+    private String destination;
 
     @Override
-    public void setQuality(String quality) {
-        this.quality = quality;
+    public final void setSource(String source) {
+        this.source = source;
     }
 
-    protected String getQuality() {
-        return quality;
+    @Override
+    public final void setDestination(String destination) {
+        this.destination = destination;
+    }
+
+    protected String getSource() {
+        return source;
+    }
+
+    protected String getDestination() {
+        return destination;
     }
     
     

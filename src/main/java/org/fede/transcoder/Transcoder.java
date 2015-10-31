@@ -39,11 +39,11 @@ public class Transcoder extends Observable {
     private static final FilenameFilter SOURCE_FILENAME_FILTER = new FileExtensionFilter(".flac");
     private static final FileFilter DIRECTORY_FILTER = new DirectoryFilter();
     private ExecutorService executor;
-    private final AudioCodec codec;
+    private final Codec codec;
     private final File src;
     private final File dst;
 
-    public Transcoder(AudioCodec codec,
+    public Transcoder(Codec codec,
             File src, File dst) {
         this.codec = codec;
         this.src = src;
@@ -92,18 +92,16 @@ public class Transcoder extends Observable {
     private void transcode(final File currentSrc, boolean overwrite)
             throws IOException, InterruptedException {
 
-        final ProcessBuilder pb = new ProcessBuilder(this.codec.getArguments());
         for (File srcFile : currentSrc.listFiles(SOURCE_FILENAME_FILTER)) {
             final String srcName = srcFile.getAbsolutePath();
             final String dstName = srcName.replace(this.src.getAbsolutePath(), this.dst.getAbsolutePath()).replace(".flac", this.codec.getExtension());
+            this.codec.setDestination(dstName);
+            this.codec.setSource(srcName);
             if (overwrite || !new File(dstName).exists()) {
+                
                 Callable<Integer> callable = () -> {
-                    Process process = null;
-                    synchronized (Transcoder.this) {
-                        codec.setDestination(dstName);
-                        codec.setSource(srcName);
-                        process = pb.start();
-                    }
+                    Process process = new ProcessBuilder(this.codec.getArguments()).start();
+
                     int val = process.waitFor();
                     if (val != 0) {
                         Logger.getLogger(Transcoder.class.getName()).log(Level.SEVERE, "ERROR: {0}: {1}", new Object[]{dstName, val});

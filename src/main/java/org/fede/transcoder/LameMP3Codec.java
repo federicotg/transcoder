@@ -19,48 +19,37 @@ package org.fede.transcoder;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-public class LameMP3Codec implements AudioCodec {
+public class LameMP3Codec extends AudioCodec {
 
     private static final String SCRIPT_NAME = "/flactomp3.sh";
-    
-    private List<String> arguments;
 
-    public LameMP3Codec() {
-        arguments = new ArrayList<>(5);
-        arguments.add(System.getProperty("java.io.tmpdir")+SCRIPT_NAME);
-        arguments.add("quality");
-        arguments.add("src");
-        arguments.add("dstDir");
-        arguments.add("dstFile");
-    }
-
-    @Override
-    public void setQuality(String quality) {
-        arguments.set(1, quality);
-    }
-
-    @Override
-    public void setSource(String src) {
-        arguments.set(2, src);
-    }
-
-    @Override
-    public void setDestination(String dst) {
-        int slashPos = dst.lastIndexOf(File.separatorChar);
-        if (slashPos != -1) {
-            arguments.set(3, dst.substring(0, slashPos));
-            arguments.set(4, dst.substring(slashPos + 1));
-        } else {
-            throw new IllegalArgumentException("Destination must have slashes (" + File.separatorChar + ")");
-        }
-    }
+    private static final List<String> ARGUMENTS = Collections.unmodifiableList(Arrays.asList(new String[]{
+        System.getProperty("java.io.tmpdir") + SCRIPT_NAME,
+        "quality",
+        "src",
+        "dstDir",
+        "dstFile"
+    }));
 
     @Override
     public List<String> getArguments() {
-        return this.arguments;
+        List<String> answer = new ArrayList<>(ARGUMENTS);
+        answer.set(1, this.getQuality());
+        answer.set(2, this.getSource());
+        final String dst = this.getDestination();
+        int slashPos = dst.lastIndexOf(File.separatorChar);
+        if (slashPos != -1) {
+            answer.set(3, dst.substring(0, slashPos));
+            answer.set(4, dst.substring(slashPos + 1));
+        } else {
+            throw new IllegalArgumentException("Destination must have slashes (" + File.separatorChar + ")");
+        }
+        return answer;
     }
 
     @Override

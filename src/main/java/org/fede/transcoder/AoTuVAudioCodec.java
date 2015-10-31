@@ -18,44 +18,32 @@
 package org.fede.transcoder;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-public class AoTuVAudioCodec implements AudioCodec {
+public class AoTuVAudioCodec extends AudioCodec {
 
     private static final String SCRIPT_NAME = "/aotuv.sh";
     
-    private List<String> arguments;
-
-    public AoTuVAudioCodec() {
-        arguments = new ArrayList<>(7);
-        arguments.add(System.getProperty("java.io.tmpdir")+SCRIPT_NAME);
-        arguments.add("-Q");
-        arguments.add("-q");
-        arguments.add("quality");
-        arguments.add("-o");
-        arguments.add("dst");
-        arguments.add("src");
-    }
-
-    @Override
-    public void setQuality(String quality) {
-        arguments.set(3, quality);
-    }
-
-    @Override
-    public void setSource(String src) {
-        arguments.set(6, src);
-    }
-
-    @Override
-    public void setDestination(String dst) {
-        arguments.set(5, dst);
-    }
+    private static final List<String> ARGUMENTS = Collections.unmodifiableList(Arrays.asList(new String[]{
+        System.getProperty("java.io.tmpdir")+SCRIPT_NAME,
+        "-Q",
+        "-q",
+        "quality",
+        "-o",
+        "dst",
+        "src"}));
 
     @Override
     public List<String> getArguments() {
-        return this.arguments;
+
+        List<String> answer = new ArrayList<>(ARGUMENTS);
+        answer.set(3, this.getQuality());
+        answer.set(5, this.getDestination());
+        answer.set(6, this.getSource());
+        return answer;
     }
 
     @Override
